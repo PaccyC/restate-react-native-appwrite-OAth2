@@ -4,6 +4,7 @@ import { useFonts } from 'expo-font'
 
 import "@/global.css"
 import { useEffect } from 'react';
+import GlobalProvider from '@/lib/global-provide';
 
 
 export const unstable_settings = {
@@ -26,15 +27,21 @@ export default function RootLayout() {
       SplashScreen.hideAsync();
     }
   },[fontsLoaded])
-  
+
   if(!fontsLoaded){
     return null;
   }
   return (
-      <Stack>
+    
+    <GlobalProvider>
+
+      <Stack screenOptions={{
+      headerShown: false
+
+      }} >
         <Stack.Screen name="(root)" options={{ headerShown: false }} />
-        <Stack.Screen name="properties" options={{ headerShown: false }} />
       </Stack>
+    </GlobalProvider>
     
   );
 }
