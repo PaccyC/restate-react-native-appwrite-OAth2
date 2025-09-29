@@ -72,7 +72,7 @@ export async function getCurretUser() {
         
         const response=await account.get();
         if(!response.$id){
-            const userAvatar=  avatar.getInitialsURL(response.name)
+            const userAvatar=  avatar.getInitials(response.name)
             return {...response,
                 avatar:userAvatar.toString()
             }

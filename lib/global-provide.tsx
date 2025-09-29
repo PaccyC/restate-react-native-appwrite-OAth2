@@ -24,6 +24,8 @@ const GlobalProvider = ({children}:{children:React.ReactNode}) => {
         fn: getCurretUser
     })
 const isLoggedIn= !!user;
+console.log(JSON.stringify(user,null,2));
+
 
   return (
     <Context.Provider value={{isLoggedIn,user,loading,refetch}}>

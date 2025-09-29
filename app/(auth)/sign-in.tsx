@@ -20,6 +20,7 @@ const SignIn = () => {
       Alert.alert("Error","Login Failed")
      }
   }
+  
   return (
     <SafeAreaView className='bg-white h-full'>
       <ScrollView  contentContainerClassName='h-full'>
