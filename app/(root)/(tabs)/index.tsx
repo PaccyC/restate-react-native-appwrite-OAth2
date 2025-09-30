@@ -1,24 +1,55 @@
 import RegularCard from "@/components/Card";
 import FeaturedCard from "@/components/FeacturedCard";
 import Filters from "@/components/Filters";
+import NoResults from "@/components/NoResults";
 import Search from "@/components/Search";
 import icons from "@/constants/icons";
 import images from "@/constants/images";
+import { getLatestProperties, getProperties } from "@/lib/appwrite";
 import { useGlobalContext } from "@/lib/global-provide";
-import { Link } from "expo-router";
-import {  FlatList, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { useAppwrite } from "@/lib/useAppwrite";
+import { router, useLocalSearchParams } from "expo-router";
+import { useEffect } from "react";
+import { ActivityIndicator, FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 
 export default function HomeScreen() {
   const {user}= useGlobalContext()
+  const params= useLocalSearchParams<{query?:string,filter?:string}>()
+
+  const { data:latestProperties,loading:latestPropertiesLoading}= useAppwrite({
+    fn:getLatestProperties
+  })
+
+    const { data:properties,loading:propertiesLoading,refetch}= useAppwrite({
+    fn:getProperties,
+    params:{
+      filter:params.filter,
+      query:params.query,
+      limit:6
+    },
+    skip:true
+  })
+  const handleCardPress= (id:string)=>router.push(`/properties/${id}`)
+
+
+  useEffect(()=>{
+
+    refetch({
+      filter:params.filter,
+      query:params.query,
+      limit:6
+    })
+    
+  },[params.filter,params.query,refetch])
   return (
  
       <SafeAreaView className="bg-gray-100 h-full">
         <FlatList
-         data={[1,2,3,4]}
-         renderItem={({item})=><RegularCard/>}
-         keyExtractor={(item)=>item.toString()}
+         data={properties}
+         renderItem={({item})=><RegularCard item={item} onPress={()=>handleCardPress(item.$id)}/>}
+         keyExtractor={(item)=>item.$id.toString()}
          numColumns={2}
          contentContainerClassName="pb-32"
          columnWrapperClassName=" flex gap-5 px-5"
@@ -46,13 +77,19 @@ export default function HomeScreen() {
         </View>
         <FlatList 
 
-        data={[1.2,3]}
-        renderItem={()=><FeaturedCard/>}
-        keyExtractor={(item)=>item.toString()}
+        data={latestProperties}
+        renderItem={({item})=><FeaturedCard item={item} onPress={()=>handleCardPress(item.$id)}/>}
+        keyExtractor={(item)=>item.$id.toString()}
         horizontal
         bounces={false}
         showsHorizontalScrollIndicator={false}
-        contentContainerClassName="flex flex-row gap-5 mt-5"
+        contentContainerClassName="flex flex-row justify-center gap-5 mt-5"
+          ListEmptyComponent={
+          latestPropertiesLoading ? 
+          <ActivityIndicator size="large" className=" text-primary-300 mt-5"/>
+          :
+          <NoResults/>
+         }
         />
      
           <View className="my-5">
@@ -67,6 +104,13 @@ export default function HomeScreen() {
        
         </View>
 
+         }
+
+         ListEmptyComponent={
+          propertiesLoading ? 
+          <ActivityIndicator size="large" className=" text-primary-300 mt-5"/>
+          :
+          <NoResults/>
          }
         />
       
