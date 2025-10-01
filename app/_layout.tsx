@@ -5,6 +5,7 @@ import { useFonts } from 'expo-font'
 import "@/global.css"
 import { useEffect } from 'react';
 import GlobalProvider from '@/lib/global-provide';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 
 export const unstable_settings = {
@@ -34,6 +35,7 @@ export default function RootLayout() {
   return (
     
     <GlobalProvider>
+      <GestureHandlerRootView>
 
       <Stack screenOptions={{
       headerShown: false
@@ -41,6 +43,8 @@ export default function RootLayout() {
       }} >
         <Stack.Screen name="(root)" options={{ headerShown: false }} />
       </Stack>
+
+      </GestureHandlerRootView>
     </GlobalProvider>
     
   );

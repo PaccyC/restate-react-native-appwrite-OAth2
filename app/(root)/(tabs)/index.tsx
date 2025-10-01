@@ -76,7 +76,6 @@ export default function HomeScreen() {
           </View>
         </View>
         <FlatList 
-
         data={latestProperties}
         renderItem={({item})=><FeaturedCard item={item} onPress={()=>handleCardPress(item.$id)}/>}
         keyExtractor={(item)=>item.$id.toString()}

@@ -5,8 +5,12 @@ import { useDebouncedCallback } from 'use-debounce'
 
 
 import icons from '@/constants/icons';
+interface SearchProps {
+  onOpenFilter?: ()=>void;
+}
 
-const Search = () => {
+
+const Search = ({onOpenFilter}:SearchProps) => {
     const path= usePathname();
     const params= useLocalSearchParams<{query? : string}>()
     const [search,setSearch]= useState(params.query);
@@ -29,7 +33,7 @@ const Search = () => {
             className='text-sm font-rubik ml-2 flex-1'
             />
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={onOpenFilter}>
             <Image source={icons.filter} className='size-5'/>
         </TouchableOpacity>
     </View>

@@ -47,10 +47,13 @@ export const useAppwrite = <T, P extends Record<string, string | number>>({
     if (!skip) {
       fetchData(params);
     }
-  }, []);
+  }, [skip]); // Only run on mount or when skip changes
 
-  
-  const refetch = async (newParams: P) => await fetchData(newParams);
+  // Wrap refetch in useCallback to maintain stable reference
+  const refetch = useCallback(
+    async (newParams: P) => await fetchData(newParams),
+    [fetchData]
+  );
 
   return { data, loading, error, refetch };
 };
