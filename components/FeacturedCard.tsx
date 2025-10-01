@@ -5,7 +5,7 @@ import icons from '@/constants/icons'
 import { Models } from 'react-native-appwrite'
 
 interface FeaturedCardProps {
-  item:Models.Document,
+  item: Models.Document,
   onPress?: ()=>void
 }
 const FeaturedCard = ({onPress,item}:FeaturedCardProps) => {
