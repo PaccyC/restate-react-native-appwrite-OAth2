@@ -137,4 +137,22 @@ export const getProperties= async({query,limit,filter}:{query?:string,limit?:num
         return[]
     }
 
+
+    
+
 }
+
+export const getPropertyById = async ({ id }: { id: string }) => {
+    try {
+        const result = await databases.getDocument(
+            config.databaseId!,
+            config.propertiesCollectionId!,
+            id
+        );
+        if (!result) throw new Error(`Product not found with id: ${id}`);
+        return result;
+    } catch (error) {
+        console.error(error);
+        throw new Error(`Error while getting product: ${error}`);
+    }
+};
